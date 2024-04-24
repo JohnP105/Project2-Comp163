@@ -1,1 +1,0 @@
-print("Racist Cat")
