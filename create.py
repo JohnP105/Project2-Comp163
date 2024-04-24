@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS Patients (
     name VARCHAR(100),
     age INT,
     gender VARCHAR(10),
-    medical_history TEXT
+    medical_history BYTEA  -- Change data type to BYTEA for encryption
 )
 """)
 
@@ -33,14 +33,13 @@ def get_connection(db_url):
 def create_tables(conn):
     try:
         cursor = conn.cursor()
+
+        # Create the pgcrypto extension if it does not exist
+        cursor.execute("CREATE EXTENSION IF NOT EXISTS pgcrypto;")
+
+        # Create database tables
         cursor.execute(CREATE_PATIENTS_TABLE)
         cursor.execute(CREATE_APPOINTMENTS_TABLE)
-        
-        # Encrypt the medical_history attribute using PostgreSQL's encryption functions
-        cursor.execute("""
-        ALTER TABLE Patients
-        ALTER COLUMN medical_history TYPE BYTEA USING medical_history::bytea;
-        """)
         
         conn.commit()
         print("Tables 'Patients' and 'Appointments' created successfully.")

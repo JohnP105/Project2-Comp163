@@ -21,3 +21,6 @@ The second objective focused on optimizing a slow query from Objective 1 to exec
    - Mac Users: `source venv/bin/activate`
    - Window Users: `venv\Scripts\activate`
 3. Install required modules: `pip install -r requirements.txt`
+4. Run python files in the following order:
+   - create.py: This file initializes the database tables required for the project.
+   - insert.py: After creating the tables, run this file to insert 'random' data into the database.
