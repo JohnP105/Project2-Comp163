@@ -40,14 +40,11 @@ def insert_patients(conn, patients):
         for patient in patients:
             name, age, gender, medical_history = patient
             
-            # Encode medical_history as UTF-8 before encryption
-            medical_history_utf8 = medical_history.encode('utf-8')
-
             # Encrypt medical_history using pgp_sym_encrypt function
             cursor.execute("""
                 INSERT INTO Patients (name, age, gender, medical_history)
-                VALUES (%s, %s, %s, pgp_sym_encrypt((%s::bytea), '123456789'))
-            """, (name, age, gender, psycopg2.Binary(medical_history_utf8)))
+                VALUES (%s, %s, %s, pgp_sym_encrypt(%s, '123456789'))
+            """, (name, age, gender, medical_history))
 
         conn.commit()
         print("Patients insertion completed.")

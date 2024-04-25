@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS Patients (
     name VARCHAR(100),
     age INT,
     gender VARCHAR(10),
-    medical_history BYTEA  -- Change data type to BYTEA for encryption
+    medical_history TEXT  
 )
 """)
 
