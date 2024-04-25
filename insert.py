@@ -3,9 +3,9 @@ import random
 from create import DATABASE_URL
 
 # Function to establish a connection to the PostgreSQL database
-def get_connection():
+def get_connection(db_url):
     try:
-        conn = psycopg2.connect(DATABASE_URL)
+        conn = psycopg2.connect(db_url)
         return conn
     except psycopg2.Error as e:
         print("Error connecting to the database:", e)
@@ -14,7 +14,7 @@ def get_connection():
 # Function to generate mock patient data
 def generate_patient_data():
     patients = []
-    for _ in range(1000):  # Insert 1000 patients
+    for _ in range(100000):  # Insert 100000 patients
         name = f"Patient_{_}"  # Generate a simple patient name
         age = random.randint(18, 100)
         gender = random.choice(['Male', 'Female'])
@@ -25,8 +25,8 @@ def generate_patient_data():
 # Function to generate mock appointment data
 def generate_appointment_data():
     appointments = []
-    for _ in range(2000):  # Insert 2000 appointments
-        patient_id = random.randint(1, 1000)  # Random patient ID
+    for _ in range(200000):  # Insert 200000 appointments
+        patient_id = random.randint(1, 100000)  # Random patient ID
         appointment_date = f"2024-04-{random.randint(1, 30)} {random.randint(0, 23)}:{random.randint(0, 59)}:00"  # Random appointment date
         doctor_name = f"Doctor_{random.randint(1, 10)}"  # Generate a simple doctor name
         reason_for_appointment = f"This is reason for appointment for Patient_{patient_id}"  # Generate a simple reason for appointment
@@ -43,7 +43,7 @@ def insert_patients(conn, patients):
             # Encrypt medical_history using pgp_sym_encrypt function
             cursor.execute("""
                 INSERT INTO Patients (name, age, gender, medical_history)
-                VALUES (%s, %s, %s, pgp_sym_encrypt(%s, '123456789'))
+                VALUES (%s, %s, %s, %s)
             """, (name, age, gender, medical_history))
 
         conn.commit()
@@ -72,7 +72,7 @@ def insert_appointments(conn, appointments):
 
 # Main function to insert data into the tables
 def main():
-    conn = get_connection()
+    conn = get_connection(DATABASE_URL)
     if conn is None:
         return  # Exit the function if connection is not established
     patients = generate_patient_data()

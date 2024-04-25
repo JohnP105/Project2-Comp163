@@ -34,9 +34,6 @@ def create_tables(conn):
     try:
         cursor = conn.cursor()
 
-        # Create the pgcrypto extension if it does not exist
-        cursor.execute("CREATE EXTENSION IF NOT EXISTS pgcrypto;")
-
         # Create database tables
         cursor.execute(CREATE_PATIENTS_TABLE)
         cursor.execute(CREATE_APPOINTMENTS_TABLE)
